@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>renmy のゲーム</title>
+<meta name="description" content="個人で作っているブラウザゲームの一覧。スマホで開くだけで遊べます。">
+<meta property="og:title" content="renmy のゲーム">
+<meta property="og:description" content="個人で作っているブラウザゲームの一覧。スマホで開くだけで遊べます。">
+<meta property="og:image" content="https://renmy-stack.github.io/icons/draw-car.png">
+<meta name="theme-color" content="#f6f3ec">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+<style>
+:root {
+  --bg: #f6f3ec; --card: #ffffff; --ink: #23262b; --sub: #5f6570; --line: #e4dfd3;
+  --chip: #efeae0; --btn: #23262b; --btn-ink: #ffffff; --shadow: 0 6px 20px rgba(60, 50, 30, .08);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17181b; --card: #222428; --ink: #eceef2; --sub: #a3a9b4; --line: #33363c;
+    --chip: #2e3136; --btn: #eceef2; --btn-ink: #17181b; --shadow: 0 6px 20px rgba(0, 0, 0, .3);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #17181b; --card: #222428; --ink: #eceef2; --sub: #a3a9b4; --line: #33363c;
+  --chip: #2e3136; --btn: #eceef2; --btn-ink: #17181b; --shadow: 0 6px 20px rgba(0, 0, 0, .3);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  line-height: 1.6;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: max(28px, env(safe-area-inset-top)) 16px 40px; }
+header { margin-bottom: 22px; }
+h1 { font-size: 28px; margin: 0; letter-spacing: .02em; }
+.lead { margin: 6px 0 0; color: var(--sub); font-size: 15px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 16px; }
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow);
+  padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0;
+}
+.head { display: flex; gap: 14px; align-items: center; }
+.head img { width: 76px; height: 76px; border-radius: 18px; flex: none; display: block; }
+.head h2 { font-size: 20px; margin: 0; line-height: 1.3; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.chip { font-size: 12px; background: var(--chip); border-radius: 999px; padding: 2px 10px; color: var(--sub); white-space: nowrap; }
+.chip.for { color: var(--ink); font-weight: 700; }
+.desc { margin: 0; font-size: 15px; }
+.points { margin: 0; padding-left: 1.2em; color: var(--sub); font-size: 14px; }
+.points li { margin: 2px 0; }
+.play {
+  margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
+  background: var(--btn); color: var(--btn-ink); text-decoration: none; font-weight: 700; font-size: 16px;
+  padding: 10px 22px; border-radius: 999px;
+}
+.play:active { transform: scale(.97); }
+footer { margin-top: 28px; color: var(--sub); font-size: 13px; }
+footer p { margin: 4px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🎮 renmy のゲーム</h1>
+    <p class="lead">個人で作っているブラウザゲームです。スマホで開くだけで遊べます。インストールは不要です。</p>
+  </header>
+
+  <main class="grid">
+    <article class="card">
+      <div class="head">
+        <img src="icons/draw-car.png" alt="" width="76" height="76">
+        <div>
+          <h2>ドローカーレース</h2>
+          <div class="chips"><span class="chip for">だれでも</span><span class="chip">レース</span><span class="chip">1プレイ 1分</span></div>
+        </div>
+      </div>
+      <p class="desc">タイヤを指で描いて、障害物コースを走らせるレース。ゴールまでのタイムで友達と勝負します。</p>
+      <ul class="points">
+        <li>走っている途中でもタイヤを描き直せる。トンネルは小さい丸、段差は四角</li>
+        <li>自己ベストの走りがゴーストになって一緒に走る</li>
+        <li>結果の画像を LINE や X にシェアできる</li>
+      </ul>
+      <a class="play" href="https://renmy-stack.github.io/draw-car/">あそぶ ▶</a>
+    </article>
+
+    <article class="card">
+      <div class="head">
+        <img src="icons/glitch-clicker.png" alt="" width="76" height="76">
+        <div>
+          <h2>グリッチ・クリッカー</h2>
+          <div class="chips"><span class="chip for">大人向け</span><span class="chip">放置・クリッカー</span><span class="chip">やり込み</span></div>
+        </div>
+      </div>
+      <p class="desc">拾った古いゲーム機「GLITCH BOY」の中は、バグだらけのレトロRPG。タップと放置で進めながら、裏技を探します。</p>
+      <ul class="points">
+        <li>見つけられる裏技（バグ）は 330 個。ヒントを頼りに探す</li>
+        <li>公式チート（デバッグメニュー）も使える</li>
+        <li>1周目クリアまで放置でおよそ 1 日</li>
+      </ul>
+      <a class="play" href="https://renmy-stack.github.io/glitch-clicker/">あそぶ ▶</a>
+    </article>
+
+    <article class="card">
+      <div class="head">
+        <img src="icons/maou-resort.png" alt="" width="76" height="76">
+        <div>
+          <h2>魔王城リゾート</h2>
+          <div class="chips"><span class="chip for">大人向け</span><span class="chip">経営シミュレーション</span></div>
+        </div>
+      </div>
+      <p class="desc">勇者に負けた魔王が、城をテーマパークにして立て直す。施設を建てて、お客を呼ぶ経営シミュレーションです。</p>
+      <ul class="points">
+        <li>施設を並べて、従業員を雇い、研究で新しい施設を増やす</li>
+        <li>1日が数秒で進むので、少しずつ遊べる</li>
+      </ul>
+      <a class="play" href="https://renmy-stack.github.io/maou-resort/">あそぶ ▶</a>
+    </article>
+
+    <article class="card">
+      <div class="head">
+        <img src="icons/yonsai-asobi.png" alt="" width="76" height="76">
+        <div>
+          <h2>4さいの あそび</h2>
+          <div class="chips"><span class="chip for">4さい向け</span><span class="chip">知育</span><span class="chip">声つき</span></div>
+        </div>
+      </div>
+      <p class="desc">4歳の子どものための、タッチで遊ぶミニゲーム集。かず・ことば・めいろ・おえかきなど 56 種類あります。</p>
+      <ul class="points">
+        <li>声で問題を読み上げるので、字が読めなくても遊べる</li>
+        <li>かきじゅんの練習や、シールあそびもある</li>
+        <li>おうちのひと向けに、遊ぶ時間のタイマーもある</li>
+      </ul>
+      <a class="play" href="https://renmy-stack.github.io/yonsai-asobi/">あそぶ ▶</a>
+    </article>
+  </main>
+
+  <footer>
+    <p>iPhone なら Safari の共有ボタンから「ホーム画面に追加」すると、アプリのように全画面で遊べます。</p>
+  </footer>
+</div>
+</body>
+</html>
