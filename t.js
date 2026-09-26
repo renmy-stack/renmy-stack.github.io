@@ -40,32 +40,38 @@
     days: Math.round((Date.parse(day) - Date.parse(f)) / 864e5)
   };
 
-  // 送る 前の 記録は スマホに 保存（t.p）。受け付けが「ok」と 返したら 消す。返事が なければ 次の 送信 / 次に ひらいた ときに 送り直す
+  // 送る 前の 記録は スマホに 保存（t.p）。受け付けが「ok」と 返したら 消す。失敗したら 間を あけて（30 秒 → 1 分 → 2 分 … 最大 30 分）送り直す
+  // 1 回に 送るのは 1 通だけ（成功したら 続けて 最大 3 通）。混んで いる ときに 送り直しで さらに 混ませない ため
   // （送り直しで 同じ 記録が 2 回 とどく ことが ある → 解析で セッション・日時・できごと・中身 が 同じ 行を 1 つに）
-  var PK = 't.p', MAXP = 200, busy = {};
+  var PK = 't.p', MAXP = 100, sending = false;
   function loadP() { try { return JSON.parse(get(PK) || '[]'); } catch (e) { return []; } }
   function saveP(p) { set(PK, JSON.stringify(p.slice(-MAXP))); }
   function flush() {
     var p = loadP();
     if (q.length) {
       ctx.v = window.T_VER || ctx.v; ctx.vp = innerWidth + 'x' + innerHeight;
+      var last = p[p.length - 1], lb = null;
+      try { lb = last && JSON.parse(last.b); } catch (e) {}
+      if (lb && lb.s === sid && lb.g === G && lb.ev.length + q.length <= 60 && !(sending && last.k === sending)) { lb.ev = lb.ev.concat(q.splice(0, 60 - lb.ev.length)); last.b = JSON.stringify(lb); }   // 前の 通に まとめる
       while (q.length) p.push({ k: rid(), b: JSON.stringify({ g: G, id: id, s: sid, ctx: ctx, ev: q.splice(0, 60) }) });
       saveP(p);
     }
-    var sent = 0;
-    for (var i = 0; i < p.length && sent < 6; i++) {
-      var it = p[i];
-      if (busy[it.k] && Date.now() - busy[it.k] < 20000) continue;   // 送っている さいちゅう
-      busy[it.k] = Date.now(); sent++;
-      (function (k, b) {
-        try {
-          fetch(API, { method: 'POST', body: b, keepalive: b.length < 60000 }).then(function (r) { return r.text(); }).then(function (t) {
-            delete busy[k];
-            if (t === 'ok' || t === 'ng') saveP(loadP().filter(function (x) { return x.k !== k; }));   // ng は 送り直しても むだ なので 消す
-          }).catch(function () { delete busy[k]; });
-        } catch (e) { delete busy[k]; }
-      })(it.k, it.b);
-    }
+    send(3);
+  }
+  function send(left) {
+    if (sending || left <= 0) return;
+    if (Date.now() < (+get('t.wait') || 0)) return;   // 失敗の あと 休み中
+    var p = loadP(); if (!p.length) return;
+    var it = p[0]; sending = it.k;
+    var done = function (ok) {
+      sending = false;
+      if (ok) { saveP(loadP().filter(function (x) { return x.k !== it.k; })); set('t.fail', '0'); set('t.wait', '0'); send(left - 1); }
+      else { var f = Math.min((+get('t.fail') || 0) + 1, 6); set('t.fail', String(f)); set('t.wait', String(Date.now() + 30000 * Math.pow(2, f - 1))); }
+    };
+    try {
+      fetch(API, { method: 'POST', body: it.b, keepalive: it.b.length < 60000 }).then(function (r) { return r.text(); })
+        .then(function (t) { done(t === 'ok' || t === 'ng'); }, function () { done(false); });   // ng は 送り直しても むだ なので 消す
+    } catch (e) { done(false); }
   }
 
   // ひらいた / 見えなく なった（とじた・ほかの アプリへ）/ また 見えた
@@ -77,6 +83,6 @@
   });
   addEventListener('pagehide', function () { flush(); });
   addEventListener('error', function (e) { if (errs++ < 5) T('error', { m: String(e.message).slice(0, 200), f: String(e.filename || '').split('/').pop(), l: e.lineno }); });
-  setTimeout(flush, 3000);
-  setInterval(flush, 30000);
+  setTimeout(flush, 5000);
+  setInterval(flush, 60000);
 })();
