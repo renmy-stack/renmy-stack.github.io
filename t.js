@@ -6,6 +6,8 @@
 (function () {
   if (window.T) return;
   var API = 'https://script.google.com/macros/s/AKfycbxLuuErUis6wXoyY_O0oP6FasLkPWSsJdRBjGzWfAuvGIS6IipmH0A6CNh-I7Swh0JSHw/exec';
+  // 送り先: Firebase Realtime Database（FB_ALL が true なら 全員、false なら ?fbtest を 1 回 ひらいた 端末だけ）。それ以外は 前の Apps Script
+  var FB = 'https://renmy-games-default-rtdb.asia-southeast1.firebasedatabase.app', FB_ALL = false;
   var G = window.T_GAME || location.pathname.split('/')[1] || 'portal';
   var q = [], off = location.hostname.indexOf('github.io') < 0, errs = 0;
   var get = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
@@ -13,6 +15,8 @@
   var rid = function () { return Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); };
   if (/[?&]nocount/.test(location.search)) set('count.off', '1');
   if (get('count.off')) off = true;
+  if (/[?&]fbtest/.test(location.search)) set('t.fb', '1');
+  var useFB = FB_ALL || get('t.fb') === '1';
   window.T = function (ev, data) { if (off) return; q.push([Date.now(), String(ev), data == null ? null : data]); if (q.length >= 30) flush(); };
   if (off) return;
 
@@ -69,8 +73,16 @@
       else { var f = Math.min((+get('t.fail') || 0) + 1, 6); set('t.fail', String(f)); set('t.wait', String(Date.now() + 30000 * Math.pow(2, f - 1))); }
     };
     try {
-      fetch(API, { method: 'POST', body: it.b, keepalive: it.b.length < 60000 }).then(function (r) { return r.text(); })
-        .then(function (t) { done(t === 'ok' || t === 'ng'); }, function () { done(false); });   // ng は 送り直しても むだ なので 消す
+      if (useFB) {
+        // Firebase: log/日付/自動ID に 1 通。中身は 文字列（ルールで 長さを しばる）。401・400 は 送り直しても むだ なので 消す
+        var o = JSON.parse(it.b), day = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+        var fb = JSON.stringify({ g: o.g, id: String(o.id), s: String(o.s), c: JSON.stringify(o.ctx || {}), e: JSON.stringify(o.ev || []), r: { '.sv': 'timestamp' } });
+        fetch(FB + '/log/' + day + '.json', { method: 'POST', body: fb, keepalive: fb.length < 60000 })
+          .then(function (r) { done(r.ok || r.status === 400 || r.status === 401); }, function () { done(false); });
+      } else {
+        fetch(API, { method: 'POST', body: it.b, keepalive: it.b.length < 60000 }).then(function (r) { return r.text(); })
+          .then(function (t) { done(t === 'ok' || t === 'ng'); }, function () { done(false); });   // ng は 送り直しても むだ なので 消す
+      }
     } catch (e) { done(false); }
   }
 
@@ -84,5 +96,5 @@
   addEventListener('pagehide', function () { flush(); });
   addEventListener('error', function (e) { if (errs++ < 5) T('error', { m: String(e.message).slice(0, 200), f: String(e.filename || '').split('/').pop(), l: e.lineno }); });
   setTimeout(flush, 10000);
-  setInterval(flush, 180000);   // 3 分ごと（見えなく なった ときにも 送る）
+  setInterval(flush, useFB ? 60000 : 180000);   // Firebase は 1 分ごと、Apps Script は 3 分ごと（見えなく なった ときにも 送る）
 })();
