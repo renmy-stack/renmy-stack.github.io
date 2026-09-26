@@ -83,6 +83,6 @@
   });
   addEventListener('pagehide', function () { flush(); });
   addEventListener('error', function (e) { if (errs++ < 5) T('error', { m: String(e.message).slice(0, 200), f: String(e.filename || '').split('/').pop(), l: e.lineno }); });
-  setTimeout(flush, 5000);
-  setInterval(flush, 60000);
+  setTimeout(flush, 10000);
+  setInterval(flush, 180000);   // 3 分ごと（見えなく なった ときにも 送る）
 })();
