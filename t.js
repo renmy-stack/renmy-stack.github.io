@@ -48,6 +48,8 @@
   // 1 回に 送るのは 1 通だけ（成功したら 続けて 最大 3 通）。混んで いる ときに 送り直しで さらに 混ませない ため
   // （送り直しで 同じ 記録が 2 回 とどく ことが ある → 解析で セッション・日時・できごと・中身 が 同じ 行を 1 つに）
   var PK = 't.p', MAXP = 100, sending = false;
+  // 端末の ようす（ctx）は、この セッションで 一度 とどくまで 毎回 つける。とどいたら 版と 表示の 大きさ だけ（1 通を 軽く）
+  var ctxOk = false;
   function loadP() { try { return JSON.parse(get(PK) || '[]'); } catch (e) { return []; } }
   function saveP(p) { set(PK, JSON.stringify(p.slice(-MAXP))); }
   function flush() {
@@ -57,7 +59,7 @@
       var last = p[p.length - 1], lb = null;
       try { lb = last && JSON.parse(last.b); } catch (e) {}
       if (lb && lb.s === sid && lb.g === G && lb.ev.length + q.length <= 60 && !(sending && last.k === sending)) { lb.ev = lb.ev.concat(q.splice(0, 60 - lb.ev.length)); last.b = JSON.stringify(lb); }   // 前の 通に まとめる
-      while (q.length) p.push({ k: rid(), b: JSON.stringify({ g: G, id: id, s: sid, ctx: ctx, ev: q.splice(0, 60) }) });
+      while (q.length) p.push({ k: rid(), full: !ctxOk, b: JSON.stringify({ g: G, id: id, s: sid, ctx: ctxOk ? { v: ctx.v, vp: ctx.vp } : ctx, ev: q.splice(0, 60) }) });
       saveP(p);
     }
     send(3);
@@ -69,7 +71,7 @@
     var it = p[0]; sending = it.k;
     var done = function (ok) {
       sending = false;
-      if (ok) { saveP(loadP().filter(function (x) { return x.k !== it.k; })); set('t.fail', '0'); set('t.wait', '0'); send(left - 1); }
+      if (ok) { if (it.full && JSON.parse(it.b).s === sid) ctxOk = true; saveP(loadP().filter(function (x) { return x.k !== it.k; })); set('t.fail', '0'); set('t.wait', '0'); send(left - 1); }
       else { var f = Math.min((+get('t.fail') || 0) + 1, 6); set('t.fail', String(f)); set('t.wait', String(Date.now() + 30000 * Math.pow(2, f - 1))); }
     };
     try {
