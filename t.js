@@ -17,7 +17,7 @@
   if (get('count.off')) off = true;
   if (/[?&]fbtest/.test(location.search)) set('t.fb', '1');
   var useFB = FB_ALL || get('t.fb') === '1';
-  window.T = function (ev, data) { if (off) return; q.push([Date.now(), String(ev), data == null ? null : data]); if (q.length >= 30) flush(); };
+  window.T = function (ev, data) { if (off) return; q.push([Date.now(), String(ev), data == null ? null : data]); if (q.length >= 60) flush(); };
   if (off) return;
 
   // 端末ID（ランダム）・この ゲームを ひらいた 回数・はじめての 日
