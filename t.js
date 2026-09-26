@@ -98,5 +98,5 @@
   addEventListener('pagehide', function () { flush(); });
   addEventListener('error', function (e) { if (errs++ < 5) T('error', { m: String(e.message).slice(0, 200), f: String(e.filename || '').split('/').pop(), l: e.lineno }); });
   setTimeout(flush, 10000);
-  setInterval(flush, useFB ? 60000 : 180000);   // Firebase は 1 分ごと、Apps Script は 3 分ごと（見えなく なった ときにも 送る）
+  setInterval(flush, 300000);   // 5 分ごと＋見えなく なった とき（Firebase は 通信 1 回ごとに 暗号化の 分も 数えられる ので 回数を しぼる）
 })();
