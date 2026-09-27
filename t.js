@@ -9,7 +9,7 @@
   // 送り先: Firebase Realtime Database（FB_ALL が true なら 全員、false なら ?fbtest を 1 回 ひらいた 端末だけ）。それ以外は 前の Apps Script
   var FB = 'https://renmy-games-default-rtdb.asia-southeast1.firebasedatabase.app', FB_ALL = true;
   // Cloudflare Workers ＋ D1（CF_ALL が true なら 全員、false なら ?cftest を 1 回 ひらいた 端末だけ）。Firebase より 先に 使う
-  var CF = 'https://renmy-log.renmy-stack.workers.dev/log', CF_ALL = false;
+  var CF = 'https://renmy-log.renmy-stack.workers.dev/log', CF_ALL = true;
   var G = window.T_GAME || location.pathname.split('/')[1] || 'portal';
   var q = [], off = location.hostname.indexOf('github.io') < 0, errs = 0;
   var get = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
