@@ -21,7 +21,9 @@
   var useFB = FB_ALL || get('t.fb') === '1';
   if (/[?&]cftest/.test(location.search)) set('t.cf', '1');
   var useCF = CF_ALL || get('t.cf') === '1';
-  window.T = function (ev, data) { if (off) return; q.push([Date.now(), String(ev), data == null ? null : data]); if (q.length >= 60) flush(); };
+  window.T = function (ev, data) { if (off) return; q.push([Date.now(), String(ev), data == null ? null : data]); keepQ(); if (q.length >= 200) flush(); };
+  // 送る 前の できごとも スマホに 置いておく（閉じる 合図が 来ないまま 終わっても 次に ひらいた ときに 送る）
+  function keepQ() { try { if (q.length) localStorage.setItem('t.q.' + sid, JSON.stringify({ g: G, id: id, s: sid, ctx: ctx, ev: q })); else localStorage.removeItem('t.q.' + sid); } catch (e) {} }
   if (off) return;
 
   // 端末ID（ランダム）・この ゲームを ひらいた 回数・はじめての 日
@@ -62,9 +64,9 @@
       ctx.v = window.T_VER || ctx.v; ctx.vp = innerWidth + 'x' + innerHeight;
       var last = p[p.length - 1], lb = null;
       try { lb = last && JSON.parse(last.b); } catch (e) {}
-      if (lb && lb.s === sid && lb.g === G && lb.ev.length + q.length <= 60 && !(sending && last.k === sending)) { lb.ev = lb.ev.concat(q.splice(0, 60 - lb.ev.length)); last.b = JSON.stringify(lb); }   // 前の 通に まとめる
-      while (q.length) p.push({ k: rid(), full: !ctxOk, b: JSON.stringify({ g: G, id: id, s: sid, ctx: ctxOk ? { v: ctx.v, vp: ctx.vp } : ctx, ev: q.splice(0, 60) }) });
-      saveP(p);
+      if (lb && lb.s === sid && lb.g === G && lb.ev.length + q.length <= 200 && !(sending && last.k === sending)) { lb.ev = lb.ev.concat(q.splice(0, 200 - lb.ev.length)); last.b = JSON.stringify(lb); }   // 前の 通に まとめる
+      while (q.length) p.push({ k: rid(), full: !ctxOk, b: JSON.stringify({ g: G, id: id, s: sid, ctx: ctxOk ? { v: ctx.v, vp: ctx.vp } : ctx, ev: q.splice(0, 200) }) });
+      saveP(p); keepQ();
     }
     send(3);
   }
@@ -104,6 +106,10 @@
   });
   addEventListener('pagehide', function () { flush(); });
   addEventListener('error', function (e) { if (errs++ < 5) T('error', { m: String(e.message).slice(0, 200), f: String(e.filename || '').split('/').pop(), l: e.lineno }); });
-  setTimeout(flush, 10000);
-  setInterval(flush, 300000);   // 5 分ごと＋見えなく なった とき（Firebase は 通信 1 回ごとに 暗号化の 分も 数えられる ので 回数を しぼる）
+  // 前の セッションで 送れなかった できごとを 送る 箱に 移す
+  try { for (var i = localStorage.length - 1; i >= 0; i--) { var k = localStorage.key(i); if (k && k.indexOf('t.q.') === 0 && k !== 't.q.' + sid) { var o = JSON.parse(localStorage.getItem(k)); var pp = loadP(); pp.push({ k: rid(), full: true, b: JSON.stringify(o) }); saveP(pp); localStorage.removeItem(k); } } } catch (e) {}
+  // 送るのは 見えなく なった とき・200 件 たまった とき・15 分ごと（1 通 = データベースの 1 行。回数を しぼって 書きこみ枠を 節約）。
+  // はじめの 10 秒で 送るのは 前に 送れなかった 分だけ
+  setTimeout(function () { send(3); }, 10000);
+  setInterval(flush, 900000);
 })();
