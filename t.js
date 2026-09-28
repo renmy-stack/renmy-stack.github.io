@@ -80,7 +80,7 @@
   var dayFirst = get('count.' + G) !== day; set('count.' + G, day);
   var last = get('t.last.' + G); set('t.last.' + G, day);
 
-  // 端末の ようす
+  // 端末の ようす（解析に 使う ものだけ。2026-09-28 に 画面の 解像度・画素比・タッチ・ダークを やめた）
   var ua = navigator.userAgent, m;
   var ipad = /iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   var os = (m = ua.match(/iPhone OS ([\d_]+)|CPU OS ([\d_]+)/)) ? 'iOS ' + (m[1] || m[2]).replace(/_/g, '.') : (m = ua.match(/Android ([\d.]+)/)) ? 'Android ' + m[1] : /Windows/.test(ua) ? 'Windows' : /Macintosh/.test(ua) ? (ipad ? 'iPadOS' : 'Mac') : /Linux/.test(ua) ? 'Linux' : 'other';
@@ -91,8 +91,8 @@
   var mm = function (s) { try { return matchMedia(s).matches; } catch (e) { return false; } };
   var ctx = {
     v: window.T_VER || '', page: location.pathname.split('/').slice(2).join('/') || '', dev: dev, os: os, br: br, app: !!(navigator.standalone || mm('(display-mode: standalone)')),
-    lang: navigator.language || '', scr: screen.width + 'x' + screen.height, vp: innerWidth + 'x' + innerHeight, dpr: devicePixelRatio || 1,
-    touch: navigator.maxTouchPoints > 0, dom: location.hostname === 'renmygames.com' ? 'r' : 'g', mv: get('mv.in') === '1', dark: mm('(prefers-color-scheme: dark)'), ref: ref, entry: entry.join(' '), n: n,
+    lang: navigator.language || '', vp: innerWidth + 'x' + innerHeight,
+    dom: location.hostname === 'renmygames.com' ? 'r' : 'g', mv: get('mv.in') === '1', ref: ref, entry: entry.join(' '), n: n,
     days: Math.round((Date.parse(day) - Date.parse(f)) / 864e5)
   };
 
@@ -143,12 +143,12 @@
     } catch (e) { done(false); }
   }
 
-  // ひらいた / 見えなく なった（とじた・ほかの アプリへ）/ また 見えた
+  // ひらいた / 見えなく なった（とじた・ほかの アプリへ）。また 見えた ときは 記録しない（hide の 秒で わかる）
   var shown = Date.now(), total = 0;
   T('open', { first: first, dayFirst: dayFirst, since: last ? Math.round((Date.parse(day) - Date.parse(last)) / 864e5) : null, load: Math.round(performance.now()) });
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'hidden') { var s = Math.round((Date.now() - shown) / 1000); total += s; T('hide', { sec: s, total: total }); flush(); }
-    else { shown = Date.now(); T('show', null); }
+    else shown = Date.now();
   });
   addEventListener('pagehide', function () { flush(); });
   addEventListener('error', function (e) { if (errs++ < 5) T('error', { m: String(e.message).slice(0, 200), f: String(e.filename || '').split('/').pop(), l: e.lineno }); });
