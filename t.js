@@ -3,6 +3,34 @@
 // 送るもの: 日時・ゲーム・できごと（ひらいた / とじた / エラー / ゲームごとの できごと）・ランダムな 端末ID・端末の 種類や 画面の 大きさ
 // 送らないもの: 名前・場所・IP など 個人の 情報。?nocount を 1 回 ひらいた 端末は 送らない（オーナー用）
 // ゲーム側からは T('できごと', { 中身 }) で 記録できる（T が なくても こわれないよう window.T && T(...) で 呼ぶ）
+// 引っこし（v=6）: renmy-stack.github.io → renmygames.com。スマホの 中の 記録（モンスター・クリア・ランクせん…）ごと 運ぶ
+// github.io で ひらくと、localStorage を まるごと URL の # に のせて 同じ ページの renmygames.com へ（# は サーバーに 送られない）
+// renmygames.com 側は 最初の 1 回だけ 受け取って 書きこみ、# から 消す。MOVE_ALL が false の あいだは ?movetest を 1 回 ひらいた 端末だけ
+(function () {
+  var NEW = 'https://renmygames.com', MOVE_ALL = false, MAX = 1500000;
+  try {
+    var ls = localStorage, h = location.hash.slice(1);
+    if (/\.github\.io$/.test(location.hostname)) {
+      if (/[?&]movetest/.test(location.search)) ls.setItem('mv.test', '1');
+      if (!MOVE_ALL && ls.getItem('mv.test') !== '1') return;
+      var all = {}; for (var i = 0; i < ls.length; i++) { var k = ls.key(i); all[k] = ls.getItem(k); }
+      var data = btoa(unescape(encodeURIComponent(JSON.stringify(all)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      if (data.length > MAX) return;   // 大きすぎる ときは 運ばない（github.io の まま あそべる）
+      document.documentElement.style.visibility = 'hidden';
+      location.replace(NEW + location.pathname + location.search + '#' + (h ? h + '&' : '') + 'mv=' + data);
+    } else if (/(^|&)mv=/.test(h)) {
+      var rest = [], got = '';
+      h.split('&').forEach(function (x) { if (x.indexOf('mv=') === 0) got = x.slice(3); else rest.push(x); });
+      if (got && ls.getItem('mv.in') !== '1') {
+        var o = JSON.parse(decodeURIComponent(escape(atob(got.replace(/-/g, '+').replace(/_/g, '/')))));
+        for (var key in o) ls.setItem(key, o[key]);   // 前の 住所の 記録を そのまま（こちらが まだ 引っこし前 なので 上書きで よい）
+        ls.setItem('mv.in', '1'); ls.setItem('mv.at', String(Date.now()));
+      }
+      history.replaceState(null, '', location.pathname + location.search + (rest.length ? '#' + rest.join('&') : ''));
+    }
+  } catch (e) {}
+})();
+
 (function () {
   if (window.T) return;
   var API = 'https://script.google.com/macros/s/AKfycbxLuuErUis6wXoyY_O0oP6FasLkPWSsJdRBjGzWfAuvGIS6IipmH0A6CNh-I7Swh0JSHw/exec';
@@ -11,7 +39,7 @@
   // Cloudflare Workers ＋ D1（CF_ALL が true なら 全員、false なら ?cftest を 1 回 ひらいた 端末だけ）。Firebase より 先に 使う
   var CF = 'https://renmy-log.renmy-stack.workers.dev/log', CF_ALL = true;
   var G = window.T_GAME || location.pathname.split('/')[1] || 'portal';
-  var q = [], off = location.hostname.indexOf('github.io') < 0, errs = 0;
+  var q = [], off = !/(\.github\.io|renmygames\.com)$/.test(location.hostname), errs = 0;
   var get = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
   var set = function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} };
   var rid = function () { return Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4); };
@@ -46,7 +74,7 @@
   var ctx = {
     v: window.T_VER || '', page: location.pathname.split('/').slice(2).join('/') || '', dev: dev, os: os, br: br, app: !!(navigator.standalone || mm('(display-mode: standalone)')),
     lang: navigator.language || '', scr: screen.width + 'x' + screen.height, vp: innerWidth + 'x' + innerHeight, dpr: devicePixelRatio || 1,
-    touch: navigator.maxTouchPoints > 0, dark: mm('(prefers-color-scheme: dark)'), ref: ref, entry: entry.join(' '), n: n,
+    touch: navigator.maxTouchPoints > 0, dom: location.hostname === 'renmygames.com' ? 'r' : 'g', mv: get('mv.in') === '1', dark: mm('(prefers-color-scheme: dark)'), ref: ref, entry: entry.join(' '), n: n,
     days: Math.round((Date.parse(day) - Date.parse(f)) / 864e5)
   };
 
