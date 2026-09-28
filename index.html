@@ -56,6 +56,15 @@ h1 { font-size: 28px; margin: 0; letter-spacing: .02em; }
   padding: 10px 22px; border-radius: 999px;
 }
 .play:active { transform: scale(.97); }
+.tier { margin: 0 0 30px; }
+.tier-h { font-size: 20px; margin: 0; }
+.tier-lead { margin: 2px 0 12px; color: var(--sub); font-size: 14px; }
+.trylist { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); gap: 8px; }
+.try { display: flex; gap: 12px; align-items: center; padding: 10px 12px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; color: var(--ink); text-decoration: none; min-width: 0; }
+.try img { width: 44px; height: 44px; border-radius: 11px; flex: none; }
+.try span { display: flex; flex-direction: column; min-width: 0; }
+.try b { font-size: 15px; }
+.try small { font-size: 13px; color: var(--sub); line-height: 1.45; }
 footer { margin-top: 28px; color: var(--sub); font-size: 13px; }
 footer p { margin: 4px 0; }
 </style>
@@ -70,59 +79,12 @@ footer p { margin: 4px 0; }
     <p class="lead">個人で作っているブラウザゲームです。スマホで開くだけで遊べます。インストールは不要です。</p>
   </header>
 
-  <main class="grid">
-    <article class="card">
-      <div class="head">
-        <img src="icons/vivarium.png" alt="" width="76" height="76">
-        <div>
-          <h2>ビバリウム</h2>
-          <div class="chips"><span class="chip for">大人向け</span><span class="chip">放置・進化</span><span class="chip">眺めるだけ</span></div>
-        </div>
-      </div>
-      <p class="desc">皿の中に草が湧き、丸い生き物が食べて増えて、少しずつ変わっていきます。プレイヤーは草の量や壁など環境をいじるだけ。放置で眺めて、現れた種を図鑑に集めます。</p>
-      <ul class="points">
-        <li>遺伝子は おおきさ・はやさ・め・たべもの・から・どく・むれ・いろ の 8 つ。全部見た目に出て、タップすると損得の式と家系図がそのまま出る</li>
-        <li>温度・毒の池・季節・かべ・いんせき で環境をいじる。肉食が現れたり、毒を持つ群れになったり、皿ごとに違う歴史になる</li>
-        <li>図鑑 17 種・ミッション 20・うつりかわりのグラフ。閉じている間も進む。友達に皿を URL で見せられる（もらって続きも育てられる）</li>
-      </ul>
-      <a class="play" href="/vivarium/">あそぶ ▶</a>
-    </article>
-
-    <article class="card">
-      <div class="head">
-        <img src="icons/draw-tower.png" alt="" width="76" height="76">
-        <div>
-          <h2>かいて！つみあげタワー</h2>
-          <div class="chips"><span class="chip for">だれでも</span><span class="chip">おえかき物理</span><span class="chip">1プレイ 1分</span></div>
-        </div>
-      </div>
-      <p class="desc">描いた形が、そのまま固い物になって落ちてくる。10 こ積んで、どこまで高いタワーを立てられるか。高さで友達と勝負します。</p>
-      <ul class="points">
-        <li>四角・棒・U 字・丸、どんな形でも描いたまま落ちる。細長いと高いけど倒れやすい</li>
-        <li>台から落ちた物は消える。崩れたら残った分だけの高さ</li>
-        <li>タワーを URL で送ると、友達が同じ積み方を見られる</li>
-      </ul>
-      <a class="play" href="/draw-tower/">あそぶ ▶</a>
-    </article>
-
-    <article class="card">
-      <div class="head">
-        <img src="icons/draw-bridge.png" alt="" width="76" height="76">
-        <div>
-          <h2>かいて！はしわたし</h2>
-          <div class="chips"><span class="chip for">だれでも</span><span class="chip">おえかきパズル</span><span class="chip">1ステージ 30秒</span></div>
-        </div>
-      </div>
-      <p class="desc">限られたインクで橋を描いて、車を向こう岸まで渡らせるパズルです。少ないインクで渡るほど高得点。自分の橋を友達に送れます。</p>
-      <ul class="points">
-        <li>画面に指で線を描くと、そのまま固い橋になる</li>
-        <li>柱・低い天井・トゲ・大きな段差など 10 ステージ</li>
-        <li>のこりインク % で友達と勝負。橋を URL で送ると、友達がその橋を走らせて見られる</li>
-      </ul>
-      <a class="play" href="/draw-bridge/">あそぶ ▶</a>
-    </article>
-
-    <article class="card">
+  <main>
+  <section class="tier">
+    <h2 class="tier-h">⭐ しっかり作ったゲーム</h2>
+    <p class="tier-lead">時間をかけて作り込んだゲームです。まずはここから。</p>
+    <div class="grid">
+      <article class="card">
       <div class="head">
         <img src="icons/draw-monster.png" alt="" width="76" height="76">
         <div>
@@ -138,43 +100,7 @@ footer p { margin: 4px 0; }
       </ul>
       <a class="play" href="/draw-monster/">あそぶ ▶</a>
     </article>
-
-    <article class="card">
-      <div class="head">
-        <img src="icons/gate-run.png" alt="" width="76" height="76">
-        <div>
-          <h2>ふやせ！ゲートラン</h2>
-          <div class="chips"><span class="chip for">だれでも</span><span class="chip">ランナー</span><span class="chip">1プレイ 30秒</span></div>
-        </div>
-      </div>
-      <p class="desc">広告でよく見る「×3 や +20 のゲートで仲間を増やして走る」ゲームを、本当に遊べる版で。ゴールの人数 × かいだんの倍率で友達と勝負します。</p>
-      <ul class="points">
-        <li>指を左右に動かして、どちらのゲートを通るか選ぶ</li>
-        <li>灰色の人は仲間に。赤い群れ・ボス・ノコギリ・プレス・落とし穴で減る</li>
-        <li>ゴールのあとは かいだん。上った段の倍率がかかる</li>
-        <li>記録をシェアすると、友達がその人数に挑戦できる</li>
-      </ul>
-      <a class="play" href="/gate-run/">あそぶ ▶</a>
-    </article>
-
-    <article class="card">
-      <div class="head">
-        <img src="icons/homerun.png" alt="" width="76" height="76">
-        <div>
-          <h2>ぶっとばしダミー</h2>
-          <div class="chips"><span class="chip for">だれでも</span><span class="chip">アクション</span><span class="chip">1プレイ 30秒</span></div>
-        </div>
-      </div>
-      <p class="desc">10秒でダミー人形をなぐってダメージを溜め、最後にバットでかっとばす。飛んだ距離で友達と勝負します。</p>
-      <ul class="points">
-        <li>タップとスワイプで4つの技。浮かせたまま当てるとコンボでダメージアップ</li>
-        <li>最後は落ちてくるダミーにタイミングよくバット</li>
-        <li>記録をシェアすると、友達がその距離に挑戦できる</li>
-      </ul>
-      <a class="play" href="/homerun/">あそぶ ▶</a>
-    </article>
-
-    <article class="card">
+      <article class="card">
       <div class="head">
         <img src="icons/draw-car.png" alt="" width="76" height="76">
         <div>
@@ -190,7 +116,29 @@ footer p { margin: 4px 0; }
       </ul>
       <a class="play" href="/draw-car/">あそぶ ▶</a>
     </article>
+      <article class="card">
+      <div class="head">
+        <img src="icons/yonsai-asobi.png" alt="" width="76" height="76">
+        <div>
+          <h2>4さいの あそび</h2>
+          <div class="chips"><span class="chip for">4さい向け</span><span class="chip">知育</span><span class="chip">声つき</span></div>
+        </div>
+      </div>
+      <p class="desc">4歳の子どものための、タッチで遊ぶミニゲーム集。かず・ことば・めいろ・おえかきなど 56 種類あります。</p>
+      <ul class="points">
+        <li>声で問題を読み上げるので、字が読めなくても遊べる</li>
+        <li>かきじゅんの練習や、シールあそびもある</li>
+        <li>おうちのひと向けに、遊ぶ時間のタイマーもある</li>
+      </ul>
+      <a class="play" href="/yonsai-asobi/">あそぶ ▶</a>
+    </article>
+    </div>
+  </section>
 
+  <section class="tier">
+    <h2 class="tier-h">🎮 あそべるゲーム</h2>
+    <p class="tier-lead">ひととおり遊べる、小さめのゲームです。</p>
+    <div class="grid">
     <article class="card">
       <div class="head">
         <img src="icons/glitch-clicker.png" alt="" width="76" height="76">
@@ -207,23 +155,35 @@ footer p { margin: 4px 0; }
       </ul>
       <a class="play" href="/glitch-clicker/">あそぶ ▶</a>
     </article>
-
     <article class="card">
       <div class="head">
-        <img src="icons/yonsai-asobi.png" alt="" width="76" height="76">
+        <img src="icons/homerun.png" alt="" width="76" height="76">
         <div>
-          <h2>4さいの あそび</h2>
-          <div class="chips"><span class="chip for">4さい向け</span><span class="chip">知育</span><span class="chip">声つき</span></div>
+          <h2>ぶっとばしダミー</h2>
+          <div class="chips"><span class="chip for">だれでも</span><span class="chip">アクション</span><span class="chip">1プレイ 30秒</span></div>
         </div>
       </div>
-      <p class="desc">4歳の子どものための、タッチで遊ぶミニゲーム集。かず・ことば・めいろ・おえかきなど 56 種類あります。</p>
+      <p class="desc">10秒でダミー人形をなぐってダメージを溜め、最後にバットでかっとばす。飛んだ距離で友達と勝負します。</p>
       <ul class="points">
-        <li>声で問題を読み上げるので、字が読めなくても遊べる</li>
-        <li>かきじゅんの練習や、シールあそびもある</li>
-        <li>おうちのひと向けに、遊ぶ時間のタイマーもある</li>
+        <li>タップとスワイプで4つの技。浮かせたまま当てるとコンボでダメージアップ</li>
+        <li>最後は落ちてくるダミーにタイミングよくバット</li>
+        <li>記録をシェアすると、友達がその距離に挑戦できる</li>
       </ul>
-      <a class="play" href="/yonsai-asobi/">あそぶ ▶</a>
+      <a class="play" href="/homerun/">あそぶ ▶</a>
     </article>
+    </div>
+  </section>
+
+  <section class="tier">
+    <h2 class="tier-h">🧪 おためし</h2>
+    <p class="tier-lead">アイデアを試しに作ったものです。遊べますが、作りはかんたんです。</p>
+    <ul class="trylist">
+      <li><a class="try" href="/gate-run/"><img src="icons/gate-run.png" alt="" width="44" height="44"><span><b>ふやせ！ゲートラン</b><small>広告でよく見る「×3 や +20 のゲートで仲間を増やして走る」ゲームを、本当に遊べる版で。</small></span></a></li>
+      <li><a class="try" href="/vivarium/"><img src="icons/vivarium.png" alt="" width="44" height="44"><span><b>ビバリウム</b><small>皿の中に草が湧き、丸い生き物が食べて増えて、少しずつ変わっていきます。</small></span></a></li>
+      <li><a class="try" href="/draw-bridge/"><img src="icons/draw-bridge.png" alt="" width="44" height="44"><span><b>かいて！はしわたし</b><small>限られたインクで橋を描いて、車を向こう岸まで渡らせるパズルです。</small></span></a></li>
+      <li><a class="try" href="/draw-tower/"><img src="icons/draw-tower.png" alt="" width="44" height="44"><span><b>かいて！つみあげタワー</b><small>描いた形が、そのまま固い物になって落ちてくる。</small></span></a></li>
+    </ul>
+  </section>
   </main>
 
   <footer>
