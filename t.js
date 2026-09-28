@@ -9,8 +9,10 @@
 // 逆むき（取りに行く）: renmygames.com を 先に ひらいた 端末は、まだ 引っこして いなければ 一度 github.io へ 行き（?mvpull）記録を 持って もどる
 // MOVE_ALL が false の あいだは github.io で ?movetest を 1 回 ひらいた 端末・renmygames.com で ?pulltest を ひらいた ときだけ
 // github.io を やめる ときは PULL を false に（取りに 行かない）
+// 取りに 行くのは github.io に もとから あった ページだけ（v=8）。新しい ゲームは github.io に ないので 行かない
 (function () {
   var NEW = 'https://renmygames.com', OLD = 'https://renmy-stack.github.io', MOVE_ALL = true, PULL = true, MAX = 1500000;
+  var OLD_PAGES = ['', 'privacy', 'draw-bridge', 'draw-car', 'draw-evolve', 'draw-monster', 'draw-tower', 'draw-weapon', 'gate-run', 'glitch-clicker', 'homerun', 'maou-resort', 'vivarium', 'yonsai-asobi'];
   try {
     var ls = localStorage, host = location.hostname, h = location.hash.slice(1), q = location.search;
     // 移動に 失敗すると 白い画面の まま に なる（iPad で 記録が 大きい とき）→ 4 秒 たっても ここに いれば 画面を 戻す。2 回 失敗した 端末は もう 運ばない（github.io の まま）
@@ -41,7 +43,7 @@
           ls.setItem('mv.in', '1'); ls.setItem('mv.at', String(Date.now()));
         }
         history.replaceState(null, '', location.pathname + q + (rest.length ? '#' + rest.join('&') : ''));
-      } else if (PULL && (MOVE_ALL || /[?&]pulltest/.test(q)) && ls.getItem('mv.in') !== '1' && sessionStorage.getItem('mv.pull') !== '1') {
+      } else if (PULL && OLD_PAGES.indexOf(location.pathname.split('/')[1] || '') >= 0 && (MOVE_ALL || /[?&]pulltest/.test(q)) && ls.getItem('mv.in') !== '1' && sessionStorage.getItem('mv.pull') !== '1') {
         sessionStorage.setItem('mv.pull', '1');   // 取りに 行くのは この タブで 1 回だけ（行き来の くりかえしを ふせぐ）
         go(OLD + location.pathname + (q ? q + '&' : '?') + 'mvpull' + location.hash);
       }
