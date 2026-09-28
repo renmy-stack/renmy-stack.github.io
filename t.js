@@ -13,17 +13,24 @@
   var NEW = 'https://renmygames.com', OLD = 'https://renmy-stack.github.io', MOVE_ALL = true, PULL = true, MAX = 1500000;
   try {
     var ls = localStorage, host = location.hostname, h = location.hash.slice(1), q = location.search;
-    var go = function (url) { document.documentElement.style.visibility = 'hidden'; location.replace(url); };
+    // 移動に 失敗すると 白い画面の まま に なる（iPad で 記録が 大きい とき）→ 4 秒 たっても ここに いれば 画面を 戻す。2 回 失敗した 端末は もう 運ばない（github.io の まま）
+    var de = document.documentElement, show = function () { de.style.visibility = ''; };
+    var go = function (url, mv) {
+      de.style.visibility = 'hidden';
+      if (mv) setTimeout(function () { show(); try { ls.setItem('mv.fail', String((+ls.getItem('mv.fail') || 0) + 1)); } catch (e) {} }, 4000);
+      try { location.replace(url); } catch (e) { show(); if (mv) try { ls.setItem('mv.fail', '9'); } catch (e2) {} }
+    };
     if (host === 'www.renmygames.com') { go(NEW + location.pathname + q + location.hash); return; }   // www は べつの 保存場所に なるので なしの 方へ
     if (/\.github\.io$/.test(host)) {
       if (/[?&]movetest/.test(q)) ls.setItem('mv.test', '1');
       var pull = /[?&]mvpull/.test(q);
       if (!MOVE_ALL && !pull && ls.getItem('mv.test') !== '1') return;
       if (pull) q = q.replace(/[?&]mvpull(=[^&]*)?/, '').replace(/^&/, '?');
+      if ((+ls.getItem('mv.fail') || 0) >= 2) return;
       var all = {}; for (var i = 0; i < ls.length; i++) { var k = ls.key(i); all[k] = ls.getItem(k); }
       var data = btoa(unescape(encodeURIComponent(JSON.stringify(all)))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
       if (data.length > MAX) return;   // 大きすぎる ときは 運ばない（github.io の まま あそべる）
-      go(NEW + location.pathname + q + '#' + (h ? h + '&' : '') + 'mv=' + data);
+      go(NEW + location.pathname + q + '#' + (h ? h + '&' : '') + 'mv=' + data, true);
     } else if (host === 'renmygames.com') {
       if (/(^|&)mv=/.test(h)) {
         var rest = [], got = '';
