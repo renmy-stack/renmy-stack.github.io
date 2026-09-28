@@ -10,7 +10,7 @@
 // MOVE_ALL が false の あいだは github.io で ?movetest を 1 回 ひらいた 端末・renmygames.com で ?pulltest を ひらいた ときだけ
 // github.io を やめる ときは PULL を false に（取りに 行かない）
 (function () {
-  var NEW = 'https://renmygames.com', OLD = 'https://renmy-stack.github.io', MOVE_ALL = false, PULL = true, MAX = 1500000;
+  var NEW = 'https://renmygames.com', OLD = 'https://renmy-stack.github.io', MOVE_ALL = true, PULL = true, MAX = 1500000;
   try {
     var ls = localStorage, host = location.hostname, h = location.hash.slice(1), q = location.search;
     var go = function (url) { document.documentElement.style.visibility = 'hidden'; location.replace(url); };

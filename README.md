@@ -1,6 +1,6 @@
 # renmy のゲーム
 
-https://renmy-stack.github.io/ のトップページ。個人で作っているブラウザゲームの一覧。
+https://renmygames.com/ のトップページ（前は renmy-stack.github.io）。個人で作っているブラウザゲームの一覧。
 
 - `index.html` … ページ本体（HTML/CSS だけ。JS なし）
 - `icons/` … 各ゲームのホーム画面用アイコンを 256px に縮小したもの
