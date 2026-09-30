@@ -108,7 +108,9 @@
   var ctxOk = false;
   function loadP() { try { return JSON.parse(get(PK) || '[]'); } catch (e) { return []; } }
   function saveP(p) { set(PK, JSON.stringify(p.slice(-MAXP))); }
+  var lastFlush = 0;
   function flush() {
+    lastFlush = Date.now();
     var p = loadP();
     if (q.length) {
       ctx.v = window.T_VER || ctx.v; ctx.vp = innerWidth + 'x' + innerHeight;
@@ -151,7 +153,9 @@
   var shown = Date.now(), total = 0;
   T('open', { first: first, dayFirst: dayFirst, since: last ? Math.round((Date.parse(day) - Date.parse(last)) / 864e5) : null, load: Math.round(performance.now()) });
   document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState === 'hidden') { var s = Math.round((Date.now() - shown) / 1000); total += s; T('hide', { sec: s, total: total }); flush(); }
+    // 見えなく なった とき 送るのは その セッションで はじめての とき（のぞいて すぐ 帰る 人の ぶん）と 前に 送って から 5 分 たった ときだけ（2026-09-30、受け付けの 回数を へらす）。
+    // 送らなかった ぶんは スマホに のこって いて（keepQ）、つぎの 5 分後・15 分ごと・ページを とじた とき・つぎに ひらいた ときに 送る
+    if (document.visibilityState === 'hidden') { var s = Math.round((Date.now() - shown) / 1000); total += s; T('hide', { sec: s, total: total }); if (!lastFlush || Date.now() - lastFlush > 300000) flush(); }
     else shown = Date.now();
   });
   addEventListener('pagehide', function () { flush(); });
