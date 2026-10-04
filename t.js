@@ -12,7 +12,7 @@
 // 記録ごと 運ぶのは モンスターバトルだけ（v=9、オーナー判断）。ほかの ページは github.io で ひらいたら 記録は 運ばず renmygames.com の 同じ ページへ
 (function () {
   var NEW = 'https://renmygames.com', OLD = 'https://renmy-stack.github.io', MOVE_ALL = true, PULL = true, MAX = 1500000;
-  var MOVE_PAGES = ['draw-monster'];
+  var MOVE_PAGES = ['draw-monster'], STAY_PAGES = ['yonsai-asobi'];
   try {
     var ls = localStorage, host = location.hostname, h = location.hash.slice(1), q = location.search;
     // 移動に 失敗すると 白い画面の まま に なる（iPad で 記録が 大きい とき）→ 4 秒 たっても ここに いれば 画面を 戻す。2 回 失敗した 端末は もう 運ばない（github.io の まま）
@@ -24,6 +24,8 @@
     };
     if (host === 'www.renmygames.com') { go(NEW + location.pathname + q + location.hash); return; }   // www は べつの 保存場所に なるので なしの 方へ
     var carry = MOVE_PAGES.indexOf(location.pathname.split('/')[1] || '') >= 0;
+    // 4さいの あそびは renmygames.com に 出さない（2026-10-04 オーナー）→ github.io で ひらいたら そのまま
+    if (/\.github\.io$/.test(host) && STAY_PAGES.indexOf(location.pathname.split('/')[1] || '') >= 0) return;
     if (/\.github\.io$/.test(host) && !carry) { go(NEW + location.pathname + q.replace(/[?&]mvpull(=[^&]*)?/, '').replace(/^&/, '?') + location.hash); return; }
     if (/\.github\.io$/.test(host)) {
       if (/[?&]movetest/.test(q)) ls.setItem('mv.test', '1');
