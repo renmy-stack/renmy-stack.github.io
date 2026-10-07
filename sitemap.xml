@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 一覧に のせて いる ゲームだけ（非公開の 新作は 入れない）。ゲームを 一覧に 足したら ここにも -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://renmygames.com/</loc><lastmod>2026-10-07</lastmod></url>
+  <url><loc>https://renmygames.com/draw-monster/</loc><lastmod>2026-10-07</lastmod></url>
+  <url><loc>https://renmygames.com/draw-monster/rank-guide</loc><lastmod>2026-10-07</lastmod></url>
+  <url><loc>https://renmygames.com/draw-car/</loc></url>
+  <url><loc>https://renmygames.com/draw-bridge/</loc></url>
+  <url><loc>https://renmygames.com/draw-tower/</loc></url>
+  <url><loc>https://renmygames.com/gate-run/</loc></url>
+  <url><loc>https://renmygames.com/homerun/</loc></url>
+  <url><loc>https://renmygames.com/glitch-clicker/</loc></url>
+  <url><loc>https://renmygames.com/vivarium/</loc></url>
+  <url><loc>https://renmygames.com/privacy/</loc></url>
+</urlset>
