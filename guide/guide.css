@@ -1,0 +1,31 @@
+:root { --bg: #f6f3ec; --card: #ffffff; --ink: #23262b; --sub: #5f6570; --line: #e4dfd3; --link: #1d5fbf; --btn: #23262b; --btn-ink: #ffffff; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #17181b; --card: #222428; --ink: #eceef2; --sub: #a3a9b4; --line: #33363c; --link: #8ab4f8; --btn: #eceef2; --btn-ink: #17181b; }
+}
+:root[data-theme="dark"] { --bg: #17181b; --card: #222428; --ink: #eceef2; --sub: #a3a9b4; --line: #33363c; --link: #8ab4f8; --btn: #eceef2; --btn-ink: #17181b; }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif; line-height: 1.75; }
+.wrap { max-width: 760px; margin: 0 auto; padding: max(24px, env(safe-area-inset-top)) 16px 48px; }
+a { color: var(--link); }
+.crumb { font-size: 14px; }
+.hero { display: flex; gap: 16px; align-items: center; margin: 14px 0 8px; }
+.hero img { width: 88px; height: 88px; border-radius: 20px; flex: none; }
+h1 { font-size: 24px; margin: 0; line-height: 1.35; }
+.tag { color: var(--sub); font-size: 13px; margin: 2px 0 0; }
+.lead { font-size: 16px; }
+section { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; margin: 14px 0; }
+h2 { font-size: 18px; margin: 0 0 8px; }
+p { margin: 6px 0; font-size: 15px; }
+ol, ul { margin: 6px 0; padding-left: 1.4em; font-size: 15px; }
+li { margin: 4px 0; }
+dl { margin: 0; display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 8px 14px; font-size: 15px; }
+dt { font-weight: 700; }
+dd { margin: 0; }
+.faq dt { grid-column: 1 / -1; }
+.faq dd { grid-column: 1 / -1; margin-bottom: 6px; color: var(--sub); }
+.play { display: inline-block; background: var(--btn); color: var(--btn-ink); text-decoration: none; font-weight: 700; font-size: 17px; padding: 12px 28px; border-radius: 999px; margin: 6px 0; }
+.others { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 14px; }
+footer { margin-top: 24px; font-size: 13px; color: var(--sub); }
+footer a { color: var(--sub); }
+@media (max-width: 480px) { dl { grid-template-columns: minmax(0, 1fr); gap: 2px; } dd { margin-bottom: 8px; } }

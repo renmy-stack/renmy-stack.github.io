@@ -22,6 +22,8 @@
       if (mv) setTimeout(function () { show(); try { ls.setItem('mv.fail', String((+ls.getItem('mv.fail') || 0) + 1)); } catch (e) {} }, 4000);
       try { location.replace(url); } catch (e) { show(); if (mv) try { ls.setItem('mv.fail', '9'); } catch (e2) {} }
     };
+    // github.io・www の ページは renmygames.com の 写し →検索・広告の 審査に「複製」と 見られない ように noindex（2026-10-09 AdSense「コンテンツが複製された画面」）
+    if ((host === 'www.renmygames.com' || /\.github\.io$/.test(host)) && STAY_PAGES.indexOf(location.pathname.split('/')[1] || '') < 0) { var nx = document.createElement('meta'); nx.name = 'robots'; nx.content = 'noindex'; document.head.appendChild(nx); }
     if (host === 'www.renmygames.com') { go(NEW + location.pathname + q + location.hash); return; }   // www は べつの 保存場所に なるので なしの 方へ
     var carry = MOVE_PAGES.indexOf(location.pathname.split('/')[1] || '') >= 0;
     // 4さいの あそびは renmygames.com に 出さない（2026-10-04 オーナー）→ github.io で ひらいたら そのまま

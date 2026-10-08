@@ -57,6 +57,11 @@ h1 { font-size: 28px; margin: 0; letter-spacing: .02em; }
   padding: 10px 22px; border-radius: 999px;
 }
 .play:active { transform: scale(.97); }
+.acts { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.acts .play { margin-top: 0; }
+.guide-link { color: var(--sub); font-size: 14px; }
+.intro { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 16px 18px; margin: 0 0 26px; font-size: 15px; }
+.intro p { margin: 4px 0; }
 .tier { margin: 0 0 30px; }
 .tier-h { font-size: 20px; margin: 0; }
 .tier-lead { margin: 2px 0 12px; color: var(--sub); font-size: 14px; }
@@ -80,6 +85,11 @@ footer p { margin: 4px 0; }
     <p class="lead">個人で作っているブラウザゲームです。スマホで開くだけで遊べます。インストールは不要です。</p>
   </header>
 
+  <section class="intro">
+    <p>「renmy のゲーム」は、ひとりで作っているブラウザゲームのサイトです。指で描いた形がそのまま物理で動くゲームを中心に、すべて無料で公開しています。登録やインストールはいりません。</p>
+    <p>はじめての方は <a href="/guide/">あそびかた・コツ</a> から。作っている人や方針は <a href="/about/">このサイトについて</a> にまとめています。</p>
+  </section>
+
   <main>
   <section class="tier">
     <h2 class="tier-h">⭐ しっかり作ったゲーム</h2>
@@ -99,7 +109,7 @@ footer p { margin: 4px 0; }
         <li>体が大きいほどタフ、腕が長いほど大振り。CPU 5 体と勝ち抜き。5 体勝ち抜くと……？</li>
         <li>モンスターを URL で送ると、友達がそのモンスターと戦える</li>
       </ul>
-      <a class="play" href="/draw-monster/">あそぶ ▶</a>
+      <div class="acts"><a class="play" href="/draw-monster/">あそぶ ▶</a><a class="guide-link" href="/guide/draw-monster/">あそびかた・コツ ›</a></div>
     </article>
     </div>
   </section>
@@ -122,7 +132,7 @@ footer p { margin: 4px 0; }
         <li>自己ベストの走りがゴーストになって一緒に走る</li>
         <li>結果の画像を LINE や X にシェアできる</li>
       </ul>
-      <a class="play" href="/draw-car/">あそぶ ▶</a>
+      <div class="acts"><a class="play" href="/draw-car/">あそぶ ▶</a><a class="guide-link" href="/guide/draw-car/">あそびかた・コツ ›</a></div>
     </article>
     <article class="card">
       <div class="head">
@@ -138,7 +148,7 @@ footer p { margin: 4px 0; }
         <li>公式チート（デバッグメニュー）も使える</li>
         <li>1周目クリアまで放置でおよそ 1 日</li>
       </ul>
-      <a class="play" href="/glitch-clicker/">あそぶ ▶</a>
+      <div class="acts"><a class="play" href="/glitch-clicker/">あそぶ ▶</a><a class="guide-link" href="/guide/glitch-clicker/">あそびかた・コツ ›</a></div>
     </article>
     <article class="card">
       <div class="head">
@@ -154,7 +164,7 @@ footer p { margin: 4px 0; }
         <li>最後は落ちてくるダミーにタイミングよくバット</li>
         <li>記録をシェアすると、友達がその距離に挑戦できる</li>
       </ul>
-      <a class="play" href="/homerun/">あそぶ ▶</a>
+      <div class="acts"><a class="play" href="/homerun/">あそぶ ▶</a><a class="guide-link" href="/guide/homerun/">あそびかた・コツ ›</a></div>
     </article>
     </div>
   </section>
@@ -168,12 +178,14 @@ footer p { margin: 4px 0; }
       <li><a class="try" href="/draw-bridge/"><img src="icons/draw-bridge.png" alt="" width="44" height="44"><span><b>かいて！はしわたし</b><small>限られたインクで橋を描いて、車を向こう岸まで渡らせるパズルです。</small></span></a></li>
       <li><a class="try" href="/draw-tower/"><img src="icons/draw-tower.png" alt="" width="44" height="44"><span><b>かいて！つみあげタワー</b><small>描いた形が、そのまま固い物になって落ちてくる。</small></span></a></li>
     </ul>
+    <p class="guide-link" style="margin-top:10px">あそびかた: <a href="/guide/gate-run/" style="color:inherit">ゲートラン</a>・<a href="/guide/vivarium/" style="color:inherit">ビバリウム</a>・<a href="/guide/draw-bridge/" style="color:inherit">はしわたし</a>・<a href="/guide/draw-tower/" style="color:inherit">つみあげタワー</a></p>
   </section>
   </main>
 
   <footer>
     <p>iPhone なら Safari の共有ボタンから「ホーム画面に追加」すると、アプリのように全画面で遊べます。</p>
-    <p><a href="/privacy/" style="color: var(--sub)">プライバシーポリシー</a></p>
+    <p><a href="/guide/" style="color: var(--sub)">あそびかた・コツ</a>・<a href="/about/" style="color: var(--sub)">このサイトについて</a>・<a href="/privacy/" style="color: var(--sub)">プライバシーポリシー</a></p>
+    <p style="color: var(--sub)">お問い合わせ: <a href="https://x.com/RenmyFX" style="color: var(--sub)">X @RenmyFX</a></p>
   </footer>
 </div>
 </body>
